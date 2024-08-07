@@ -5,9 +5,9 @@ import AppConfig from '@/layout/AppConfig.vue';
 const { layoutConfig } = useLayout();
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
-import { useToast } from 'primevue/usetoast';
+import { useGlobal } from "@/services/useGlobal";
+const { toast, FunctionGlobal } = useGlobal();
 
-const toast = useToast();
 const router = useRouter();
 const store = useStore();
 const userCredentials = ref({})
@@ -23,9 +23,14 @@ onMounted(() => {
 })
 const handleSubmit = () => {
     store.dispatch("auth/login", userCredentials.value).then((res) => {
-        if (!res.status) {
-
+        console.log(res);
+        return
+        if (res.status) {
+            FunctionGlobal.$notify("E", "Thông tin đăng nhập không chính xác!", toast);
+        } else {
+            router.push("/")
         }
+
     })
 };
 </script>
